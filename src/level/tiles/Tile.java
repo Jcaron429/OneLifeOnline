@@ -7,9 +7,9 @@ import gfx.Screen;
 public abstract class Tile {
 
 	public static final Tile[] tiles = new Tile[256];
-	public static final Object VOID = new BasicTile(0,0,0, Colors.get(000,-1,-1,-1));
-	public static final Object STONE = new BasicTile(1,1,0, Colors.get(-1,333,-1,-1));
-	public static final Object GRASS = new BasicTile(2,2,0, Colors.get(-1,131,141,-1));
+	public static final Tile VOID = new BasicTile(0,0,0, Colors.get(000,-1,-1,-1));
+	public static final Tile STONE = new BasicTile(1,1,0, Colors.get(-1,333,-1,-1));
+	public static final Tile GRASS = new BasicTile(2,2,0, Colors.get(-1,131,141,-1));
 	
 	protected byte id;
 	protected boolean solid;
