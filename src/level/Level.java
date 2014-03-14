@@ -3,8 +3,13 @@ package level;
 import game.entities.Entity;
 import gfx.Screen;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import level.tiles.Tile;
 
@@ -14,13 +19,58 @@ public class Level {
 	public int width;
 	public int height;
 	public List<Entity> entities = new ArrayList <Entity>();
+	private String imagePath;
+	private BufferedImage image;
 
-	public Level(int width, int height) {
+	public Level(String imagePath) {
+		if (imagePath !=null){
+			this.imagePath = imagePath;
+			this.loadLevelFromFile();
+		}else{
 		tiles = new byte[width * height];
 		this.width = width;
 		this.height = height;
 		this.generateLevel();
+		}
+	}
 
+	private void loadLevelFromFile(){
+		try {
+			this.image = ImageIO.read(Level.class.getResource(this.imagePath));
+			this.width = this.image.getWidth();
+			this.height= this.image.getHeight();
+			tiles = new byte[width * height];
+			this.loadTiles();
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadTiles() {
+	int[] tileColors = this.image.getRGB(0,0,width,height,null,0,width);
+	for(int y = 0; y < height; y++){
+		for(int x = 0; x < width;x++){
+			tileCheck: for(Tile t : Tile.tiles){
+				if (t!= null && t.getLevelColor() == tileColors[x + y * width]){
+					this.tiles[x + y * width] = t.getId();
+					break tileCheck;
+				}
+			}
+		}
+	}
+	}
+	
+	private void saveLevelToFile(){
+		try {
+			ImageIO.write(image, "png", new File(Level.class.getResource(this.imagePath).getFile()));
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void alterTile(int x, int y, Tile newTile){
+		this.tiles[x + y * width] = newTile.getId();
+		image.setRGB(x, y, newTile.getLevelColor());
 	}
 
 	 public void generateLevel() {

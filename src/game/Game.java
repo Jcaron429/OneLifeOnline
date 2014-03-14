@@ -1,6 +1,7 @@
 package game;
 
 import game.entities.Player;
+import gfx.Bar;
 import gfx.Colors;
 import gfx.Font;
 import gfx.Screen;
@@ -24,8 +25,8 @@ public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH=160;
-	public static final int HEIGHT = WIDTH/12*9;
+	public static final int WIDTH=300;
+	public static final int HEIGHT = 225;
 	public static final int SCALE = 3;
 	public static final String NAME = "Game";
 	
@@ -39,6 +40,7 @@ public class Game extends Canvas implements Runnable{
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private int[] colors = new int[6*6*6]; //216 bit color array
 	
+	private Bar bar;
 	private Screen screen;
 	public InputHandler input;
 	public Level level;
@@ -55,7 +57,7 @@ public class Game extends Canvas implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		
-		frame.add(this, BorderLayout.CENTER);
+		frame.add(this, BorderLayout.NORTH);
 		frame.pack();
 		
 		frame.setResizable(false);
@@ -86,8 +88,9 @@ public class Game extends Canvas implements Runnable{
 		
 		
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/sprite_sheet.png"));
+		//bar = new Bar(WIDTH,45,);
 		input = new InputHandler(this);
-		level = new Level(64,64);
+		level = new Level("/levels/small_level.png");
 		player = new Player(level, 0, 0,input);
 		level.addEntity(player);
 		
@@ -144,7 +147,7 @@ public class Game extends Canvas implements Runnable{
 	
 
 	
-	public void tick(){ //shifts screen based on input handled by InputhHandler
+	public void tick(){
 		tickCount++;
 		
 		
@@ -175,7 +178,7 @@ public class Game extends Canvas implements Runnable{
 		if (x % 10 == 0 && x != 0){
 			color = Colors.get(-1, -1, -1, 500);
 		}
-		Font.render((x % 10) + "", screen, 0 + (x*8), 0, color, 1);
+		
 	}
 	
 	level.renderEntities(screen);
