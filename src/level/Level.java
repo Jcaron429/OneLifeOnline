@@ -28,8 +28,6 @@ public class Level {
 			this.loadLevelFromFile();
 		}else{
 		tiles = new byte[width * height];
-		this.width = width;
-		this.height = height;
 		this.generateLevel();
 		}
 	}
@@ -47,18 +45,19 @@ public class Level {
 	}
 	
 	private void loadTiles() {
-	int[] tileColors = this.image.getRGB(0,0,width,height,null,0,width);
-	for(int y = 0; y < height; y++){
-		for(int x = 0; x < width;x++){
-			tileCheck: for(Tile t : Tile.tiles){
-				if (t!= null && t.getLevelColor() == tileColors[x + y * width]){
-					this.tiles[x + y * width] = t.getId();
-					break tileCheck;
-				}
-			}
-		}
-	}
-	}
+        int[] tileColours = this.image.getRGB(0, 0, width, height, null, 0, width);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                tileCheck: for (Tile t : Tile.tiles) {
+                    if (t != null && t.getLevelColor() == tileColours[x + y * width]) {
+                        this.tiles[x + y * width] = t.getId();
+                        break tileCheck;
+                    }
+                }
+            }
+        }
+    }
+
 	
 	private void saveLevelToFile(){
 		try {
@@ -85,13 +84,23 @@ public class Level {
 	        }
 	    }
 	
-	public void tick(){
-		for (Entity e : entities){
-			e.tick();
-		}
-		
-	}
-	
+	 public synchronized List<Entity> getEntities() {
+	        return this.entities;
+	    }
+
+	    public void tick() {
+	        for (Entity e : getEntities()) {
+	            e.tick();
+	        }
+
+	        for (Tile t : Tile.tiles) {
+	            if (t == null) {
+	                break;
+	            }
+	            t.tick();
+	        }
+	    }
+
 
 	public void renderTiles(Screen screen, int xOffset, int yOffset) {
         if (xOffset < 0)

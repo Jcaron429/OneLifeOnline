@@ -1,7 +1,9 @@
 package level.tiles;
 
-import level.Level;
 import gfx.Colors;
+import level.tiles.AnimatedTile;
+import level.tiles.Tile;
+import level.Level;
 import gfx.Screen;
 
 public abstract class Tile {
@@ -11,6 +13,8 @@ public abstract class Tile {
 	public static final Tile STONE = new BasicSolidTile(1,1,0, Colors.get(-1,333,-1,-1), 0xFF555555);
 	public static final Tile GRASS = new BasicTile(2,2,0, Colors.get(-1,131,141,-1), 0xFF00FF00);
 	public static final Tile TREE = new BasicSolidTile(3,1,31,Colors.get(131,020,050,321), 0xFF005525);
+	public static final Tile WATER = new AnimatedTile(4, new int[][] { { 0, 5 }, { 1, 5 }, { 2, 5 }, { 1, 5 } },
+            Colors.get(-1, 004, 115, -1), 0xFF0000FF, 1000);
 	
 	protected byte id;
 	protected boolean solid;
@@ -41,6 +45,9 @@ public abstract class Tile {
 	public int getLevelColor(){
 		return levelColor;
 	}
+	
+	public abstract void tick();
+	
 
 	public abstract void render(Screen screen, Level level, int x, int y);
 		

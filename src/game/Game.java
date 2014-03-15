@@ -1,9 +1,7 @@
 package game;
 
 import game.entities.Player;
-import gfx.Bar;
 import gfx.Colors;
-import gfx.Font;
 import gfx.Screen;
 import gfx.SpriteSheet;
 
@@ -17,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import level.Level;
 
@@ -40,7 +39,6 @@ public class Game extends Canvas implements Runnable{
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private int[] colors = new int[6*6*6]; //216 bit color array
 	
-	private Bar bar;
 	private Screen screen;
 	public InputHandler input;
 	public Level level;
@@ -90,8 +88,8 @@ public class Game extends Canvas implements Runnable{
 		screen = new Screen(WIDTH, HEIGHT, new SpriteSheet("/sprite_sheet.png"));
 		//bar = new Bar(WIDTH,45,);
 		input = new InputHandler(this);
-		level = new Level("/levels/small_level.png");
-		player = new Player(level, 0, 0,input);
+		level = new Level("/levels/WaterTestLvl.png");
+		player = new Player(level, 0, 0,input, JOptionPane.showInputDialog(this, "Please Enter a Username" ));
 		level.addEntity(player);
 		
 	}
